@@ -114,11 +114,3 @@ bugtracker/
         BugDetail.js   # single bug view with comments
         ManageUsers.js # admin user management
 ```
-
-## Screenshots
-
-_Coming soon_
-
-## Author
-
-**Pragati Singh** - 2025 Graduate
