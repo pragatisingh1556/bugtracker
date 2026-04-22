@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-var API_URL = "http://localhost:5000/api";
+var API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 function Signup(props) {
     var [name, setName] = useState("");

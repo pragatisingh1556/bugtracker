@@ -7,30 +7,29 @@ var dotenv = require("dotenv");
 
 dotenv.config();
 
-// first connect without database name to create the database
-var connection = mysql.createConnection({
+// first connect with the database name (cloud mysql requires db to exist already)
+// for local dev, we create it if not exists below
+var connectionConfig = {
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
-});
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+};
+
+// enable SSL for cloud mysql
+if (process.env.DB_SSL === "true") {
+    connectionConfig.ssl = { rejectUnauthorized: true };
+}
+
+var connection = mysql.createConnection(connectionConfig);
 
 console.log("Setting up BugTracker database...");
 
-// create database if it doesnt exist
-connection.query("CREATE DATABASE IF NOT EXISTS bugtracker", function(err) {
-    if (err) {
-        console.log("Error creating database:", err.message);
-        process.exit(1);
-    }
-    console.log("Database 'bugtracker' created or already exists");
-
-    // switch to bugtracker database
-    connection.query("USE bugtracker", function(err) {
-        if (err) {
-            console.log("Error selecting database:", err.message);
-            process.exit(1);
-        }
-
+// for cloud mysql, database already exists (we connected to it above)
+// we just need to create the tables
+(function() {
+    {
         // create users table
         // role can be: admin, developer, tester
         var usersTable = "CREATE TABLE IF NOT EXISTS users (" +
@@ -115,5 +114,5 @@ connection.query("CREATE DATABASE IF NOT EXISTS bugtracker", function(err) {
                 });
             });
         });
-    });
-});
+    }
+})();

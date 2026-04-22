@@ -12,7 +12,7 @@ import { Pie, Bar } from "react-chartjs-2";
 // Register Chart.js components so they can be used
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
-var API_URL = "http://localhost:5000/api";
+var API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 function Dashboard(props) {
     var token = props.token;
